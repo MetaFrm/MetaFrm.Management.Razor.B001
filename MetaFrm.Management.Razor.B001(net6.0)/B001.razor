@@ -11,101 +11,93 @@
 @using Microsoft.AspNetCore.Components.Web
 @inherits BaseComponent
 
-<div>
-    <TitleControl Title="@this.GetAttribute("Description")"></TitleControl>
+<TitleControl Title="@this.GetAttribute("Description")"></TitleControl>
 
-    @if (this.GroupWindowStatus == GroupWindowStatus.Close)
-    {
-        <DataGridControl TItem="MenuModel" @ref="this.DataGridControl" Columns="this.ColumnDefinitions" DataItems="this.A001ViewModel.SelectResultModel" PagingEnabled="false"
-                     TableClass="table-hover"
-                     RowAdd="this.New"
-                     MovePage="this.Search"
-                     RowModify="this.RowModify">
-            <SearchInputControl>
-                <input type="text" class="form-control rounded-start" placeholder="Search" @bind-value="@this.A001ViewModel.SearchModel.SEARCH_TEXT" @onkeyup="@SearchKeydown" />
-            </SearchInputControl>
-            <SearchButtonControl>
-                <button class="btn btn-outline-primary btn-rounded-end" type="button" @onclick="(() => this.OnSearch())">
-                    <span class="oi oi-magnifying-glass" />
-                </button>
-            </SearchButtonControl>
-        </DataGridControl>
-    }
-    else
-    {
-        <GroupControl TItem="MenuModel" SelectItem="this.SelectItem" SelectItemKeyProperty="@(nameof(this.SelectItem.ASSEMBLY_ID))"
-                  Close="this.Close" GroupWindowStatus="this.GroupWindowStatus">
-            <Control>
-                <EditForm class="container" Model="@this.SelectItem" OnValidSubmit="this.Save">
-                    <DataAnnotationsValidator />
+<DataGridControl TItem="MenuModel" @ref="this.DataGridControl" Columns="this.ColumnDefinitions" DataItems="this.A001ViewModel.SelectResultModel" PagingEnabled="false"
+                 TableClass="table-hover"
+                 RowAdd="this.New"
+                 MovePage="this.Search"
+                 RowModify="this.RowModify">
+    <SearchInputControl>
+        <input type="text" class="form-control rounded-start" placeholder="Search" @bind-value="@this.A001ViewModel.SearchModel.SEARCH_TEXT" @onkeyup="@SearchKeydown" />
+    </SearchInputControl>
+    <SearchButtonControl>
+        <button class="btn btn-outline-primary btn-rounded-end" type="button" @onclick="(() => this.OnSearch())">
+            <span class="oi oi-magnifying-glass" />
+        </button>
+    </SearchButtonControl>
+</DataGridControl>
 
-                    <FieldControl Label="Menu ID" Value="this.SelectItem.MENU_ID" CssClassDiv="pt-2 pb-1"></FieldControl>
-                    <FieldControl Label="Menu name">
-                        <Control>
-                            <InputText id="menuname" class="form-control" placeholder="Menu name" @bind-Value="this.SelectItem.NAME" />
-                            <ValidationMessage For="@(()=>this.SelectItem.NAME)" />
-                        </Control>
-                    </FieldControl>
-                    <FieldControl Label="Menu description">
-                        <Control>
-                            <InputText id="menudescription" class="form-control" placeholder="Menu description" @bind-Value="this.SelectItem.DESCRIPTION" />
-                            <ValidationMessage For="@(()=>this.SelectItem.DESCRIPTION)" />
-                        </Control>
-                    </FieldControl>
+<ModalControl TItem="MenuModel" SelectItem="this.SelectItem" SelectItemKeyProperty="@(nameof(this.SelectItem.MENU_ID))">
+    <Control>
+        <EditForm class="container" Model="@this.SelectItem" OnValidSubmit="this.Save">
+            <DataAnnotationsValidator />
 
-                    <FieldControl Label="Parent Menu">
-                        <Control>
-                            <InputSelect class="form-select" @bind-Value="@this.SelectItem.PARENT_MENU_ID">
-                                <DictionaryControl Code="METAFRM_MGMT.MENU.PARENT_MENU" Items="this.ParentMenuItems" ResultEvent="this.OnResultEventParentMenuItems" CondtionEtc="@($"A.MENU_ID <> {this.SelectItem.MENU_ID}")">
-                                    <Control>
-                                        @if (this.ParentMenuItems != null)
-                                            foreach (var item in this.ParentMenuItems)
-                                            {
-                                                <option Value="@(item.Int("MENU_ID"))">@item.String("NAME")</option>
-                                            }
-                                    </Control>
-                                </DictionaryControl>
-                            </InputSelect>
-                            <ValidationMessage For="@(()=>this.SelectItem.PARENT_MENU_ID)" />
-                        </Control>
-                    </FieldControl>
+            <FieldControl Label="Menu ID" Value="this.SelectItem.MENU_ID" CssClassDiv="pt-2 pb-1"></FieldControl>
+            <FieldControl Label="Menu name">
+                <Control>
+                    <InputText id="menuname" class="form-control" placeholder="Menu name" @bind-Value="this.SelectItem.NAME" />
+                    <ValidationMessage For="@(()=>this.SelectItem.NAME)" />
+                </Control>
+            </FieldControl>
+            <FieldControl Label="Menu description">
+                <Control>
+                    <InputText id="menudescription" class="form-control" placeholder="Menu description" @bind-Value="this.SelectItem.DESCRIPTION" />
+                    <ValidationMessage For="@(()=>this.SelectItem.DESCRIPTION)" />
+                </Control>
+            </FieldControl>
 
-                    <FieldControl Label="Assembly">
-                        <Control>
-                            <InputSelect class="form-select" @bind-Value="@this.SelectItem.ASSEMBLY_ID">
-                                <DictionaryControl Code="METAFRM_MGMT.ASSEMBLY" Items="this.AssemblyItems" ResultEvent="this.OnResultEventAssemblyItems" AppendEmptyItem="true">
-                                    <Control>
-                                        @if (this.AssemblyItems != null)
-                                            foreach (var item in this.AssemblyItems)
-                                            {
-                                                <option Value="@(item.Int("ASSEMBLY_ID"))">@item.String("NAMESPACE")</option>
-                                            }
-                                    </Control>
-                                </DictionaryControl>
-                            </InputSelect>
-                            <ValidationMessage For="@(()=>this.SelectItem.ASSEMBLY_ID)" />
-                        </Control>
-                    </FieldControl>
-                    
-                    <div class="row">
-                        <FieldControl Label="Sort" CssClassDiv="py-2 col-md-3">
+            <FieldControl Label="Parent Menu">
+                <Control>
+                    <InputSelect class="form-select" @bind-Value="@this.SelectItem.PARENT_MENU_ID">
+                        <DictionaryControl Code="METAFRM_MGMT.MENU.PARENT_MENU" Items="this.ParentMenuItems" ResultEvent="this.OnResultEventParentMenuItems" CondtionEtc="@($"A.MENU_ID <> {this.SelectItem.MENU_ID}")">
                             <Control>
-                                <InputNumber id="sort" class="form-control" placeholder="Sort" @bind-Value="this.SelectItem.SORT" />
-                                <ValidationMessage For="@(()=>this.SelectItem.SORT)" />
+                                @if (this.ParentMenuItems != null)
+                                    foreach (var item in this.ParentMenuItems)
+                                    {
+                                        <option Value="@(item.Int("MENU_ID"))">@item.String("NAME")</option>
+                                    }
                             </Control>
-                        </FieldControl>
+                        </DictionaryControl>
+                    </InputSelect>
+                    <ValidationMessage For="@(()=>this.SelectItem.PARENT_MENU_ID)" />
+                </Control>
+            </FieldControl>
 
-                        <FieldControl Label="Visible" CssClassDiv="py-2 col-md-3">
+            <FieldControl Label="Assembly">
+                <Control>
+                    <InputSelect class="form-select" @bind-Value="@this.SelectItem.ASSEMBLY_ID">
+                        <DictionaryControl Code="METAFRM_MGMT.ASSEMBLY" Items="this.AssemblyItems" ResultEvent="this.OnResultEventAssemblyItems" AppendEmptyItem="true">
                             <Control>
-                                <InputCheckbox id="isvisible" class="form-check-input" placeholder="Visible" @bind-Value="this.SelectItem.IS_VISIBLE" />
-                                <ValidationMessage For="@(()=>this.SelectItem.IS_VISIBLE)" />
+                                @if (this.AssemblyItems != null)
+                                    foreach (var item in this.AssemblyItems)
+                                    {
+                                        <option Value="@(item.Int("ASSEMBLY_ID"))">@item.String("NAMESPACE")</option>
+                                    }
                             </Control>
-                        </FieldControl>
-                    </div>
+                        </DictionaryControl>
+                    </InputSelect>
+                    <ValidationMessage For="@(()=>this.SelectItem.ASSEMBLY_ID)" />
+                </Control>
+            </FieldControl>
 
-                    <CommandControl TItem="MenuModel" SelectItem="this.SelectItem" SelectItemKeyProperty="@(nameof(this.SelectItem.MENU_ID))" SaveIsSubmit="true" New="this.New" Copy="this.Copy" Delete="this.Delete" />
-                </EditForm>
-            </Control>
-        </GroupControl>
-    }
-</div>
+            <div class="row">
+                <FieldControl Label="Sort" CssClassDiv="py-2 col-md-3">
+                    <Control>
+                        <InputNumber id="sort" class="form-control" placeholder="Sort" @bind-Value="this.SelectItem.SORT" />
+                        <ValidationMessage For="@(()=>this.SelectItem.SORT)" />
+                    </Control>
+                </FieldControl>
+
+                <FieldControl Label="Visible" CssClassDiv="py-2 col-md-3">
+                    <Control>
+                        <InputCheckbox id="isvisible" class="form-check-input" placeholder="Visible" @bind-Value="this.SelectItem.IS_VISIBLE" />
+                        <ValidationMessage For="@(()=>this.SelectItem.IS_VISIBLE)" />
+                    </Control>
+                </FieldControl>
+            </div>
+
+            <CommandControl TItem="MenuModel" SelectItem="this.SelectItem" SelectItemKeyProperty="@(nameof(this.SelectItem.MENU_ID))" SaveIsSubmit="true" New="this.New" Copy="this.Copy" Delete="this.Delete" />
+        </EditForm>
+    </Control>
+</ModalControl>

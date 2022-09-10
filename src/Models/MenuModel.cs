@@ -45,7 +45,7 @@ namespace MetaFrm.Management.Razor.Models
         /// <summary>
         /// IS_VISIBLE
         /// </summary>
-        public bool IS_VISIBLE { get; set; }
+        public bool IS_VISIBLE { get; set; } = true;
 
         /// <summary>
         /// ASSEMBLY_ID

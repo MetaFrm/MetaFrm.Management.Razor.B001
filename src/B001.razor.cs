@@ -26,8 +26,6 @@ namespace MetaFrm.Management.Razor
         internal IEnumerable<Data.DataRow>? AssemblyItems;
 
         internal MenuModel SelectItem = new();
-
-        internal GroupWindowStatus GroupWindowStatus = GroupWindowStatus.Close;
         #endregion
 
 
@@ -78,9 +76,7 @@ namespace MetaFrm.Management.Razor
         #region IO
         private void New()
         {
-            if (this.SelectItem.ASSEMBLY_ID != null || this.GroupWindowStatus != GroupWindowStatus.Close)
-                this.SelectItem = new();
-            this.GroupWindowStatus = GroupWindowStatus.Maximize;
+            this.SelectItem = new();
         }
 
         private void OnSearch()
@@ -270,7 +266,6 @@ namespace MetaFrm.Management.Razor
                 if (response.Status == Status.OK)
                 {
                     this.New();
-                    this.Close();
                     this.ToastShow("Completed", $"{this.GetAttribute("Title")} deleted successfully.", Alert.ToastDuration.Long);
                 }
                 else
@@ -327,8 +322,6 @@ namespace MetaFrm.Management.Razor
             };
 
             this.ParentMenuItems = null;
-
-            this.GroupWindowStatus = GroupWindowStatus.Maximize;
         }
 
         private void Copy()
@@ -339,11 +332,6 @@ namespace MetaFrm.Management.Razor
                 this.SelectItem.ASSEMBLY_ID = null;
                 this.SelectItem.NAMESPACE = null;
             }
-        }
-
-        private void Close()
-        {
-            this.GroupWindowStatus = GroupWindowStatus.Close;
         }
         #endregion
     }
