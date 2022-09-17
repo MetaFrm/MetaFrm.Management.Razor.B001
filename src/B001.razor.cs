@@ -1,6 +1,5 @@
 ﻿using MetaFrm.Extensions;
 using MetaFrm.Razor.DataGrid;
-using MetaFrm.Razor.Group;
 using MetaFrm.Service;
 using MetaFrm.Web.Bootstrap;
 using Microsoft.AspNetCore.Components.Web;
@@ -20,7 +19,6 @@ namespace MetaFrm.Management.Razor
         internal B001ViewModel A001ViewModel { get; set; } = Factory.CreateViewModel<B001ViewModel>();
 
         internal DataGridControl<MenuModel>? DataGridControl;
-        internal List<ColumnDefinitions>? ColumnDefinitions;
 
         internal IEnumerable<Data.DataRow>? ParentMenuItems;
         internal IEnumerable<Data.DataRow>? AssemblyItems;
@@ -30,21 +28,6 @@ namespace MetaFrm.Management.Razor
 
 
         #region Init
-        /// <summary>
-        /// OnInitialized
-        /// </summary>
-        protected override void OnInitialized()
-        {
-            if (this.ColumnDefinitions == null)
-            {
-                this.ColumnDefinitions = new();
-                this.ColumnDefinitions.AddRange(new ColumnDefinitions[] {
-                    new ColumnDefinitions{ DataField = nameof(MenuModel.NAME), Caption = "Menu", DataType = DbType.NVarChar, Class = "text-break", SortDirection = SortDirection.NotSet },
-                    new ColumnDefinitions{ DataField = nameof(MenuModel.PARENT_NAME), Caption = "Parent", DataType = DbType.NVarChar, Class = "text-break", SortDirection = SortDirection.NotSet },
-                    new ColumnDefinitions{ DataField = nameof(MenuModel.SORT), Caption = "Sort", DataType = DbType.Int, Class = "text-break", SortDirection = SortDirection.NotSet } });
-            }
-        }
-
         /// <summary>
         /// OnAfterRenderAsync
         /// </summary>
@@ -149,9 +132,7 @@ namespace MetaFrm.Management.Razor
             finally
             {
                 this.A001ViewModel.IsBusy = false;
-#pragma warning disable CS4014 // 이 호출을 대기하지 않으므로 호출이 완료되기 전에 현재 메서드가 계속 실행됩니다.
                 this.SetSession(nameof(A001ViewModel), this.A001ViewModel);
-#pragma warning restore CS4014 // 이 호출을 대기하지 않으므로 호출이 완료되기 전에 현재 메서드가 계속 실행됩니다.
             }
         }
 

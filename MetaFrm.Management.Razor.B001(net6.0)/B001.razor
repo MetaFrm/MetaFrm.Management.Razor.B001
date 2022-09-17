@@ -1,4 +1,5 @@
 ﻿@using MetaFrm.Control
+@using MetaFrm.Database
 @using MetaFrm.Management.Razor.Models
 @using MetaFrm.Razor.Command
 @using MetaFrm.Razor.DataGrid
@@ -13,11 +14,21 @@
 
 <TitleControl Title="@this.GetAttribute("Description")"></TitleControl>
 
-<DataGridControl TItem="MenuModel" @ref="this.DataGridControl" Columns="this.ColumnDefinitions" DataItems="this.A001ViewModel.SelectResultModel" PagingEnabled="false"
+<DataGridControl TItem="MenuModel" @ref="this.DataGridControl" DataItems="this.A001ViewModel.SelectResultModel" PagingEnabled="false"
                  TableClass="table-hover"
                  RowAdd="this.New"
                  MovePage="this.Search"
-                 RowModify="this.RowModify">
+                 RowModify="this.RowModify"
+                 Columns="@(new ColumnDefinitions[] {
+                    new(DbType.Int, SortDirection.Normal, Alignment.Right, nameof(MenuModel.MENU_ID), "Menu ID", "d-none d-sm-table-cell"),
+                    new(DbType.NVarChar, SortDirection.NotSet, nameof(MenuModel.NAME), "Menu"),
+                    new(DbType.Int, SortDirection.Normal, Alignment.Right, nameof(MenuModel.PARENT_MENU_ID), "Parent ID", "d-none d-md-table-cell"),
+                    new(DbType.NVarChar, SortDirection.NotSet, nameof(MenuModel.PARENT_NAME), "Parent"),
+                    new(DbType.NVarChar, SortDirection.NotSet, nameof(MenuModel.DESCRIPTION), "Menu description", "d-none d-lg-table-cell"),
+                    new(DbType.NVarChar, SortDirection.NotSet, nameof(MenuModel.IS_VISIBLE), "Visible", "d-none d-sm-table-cell"),
+                    new(DbType.Int, SortDirection.Normal, Alignment.Right, nameof(MenuModel.ASSEMBLY_ID), "Assembly ID", "d-none d-xl-table-cell"),
+                    new(DbType.NVarChar, SortDirection.NotSet, nameof(MenuModel.NAMESPACE), "Namespace", "d-none d-xl-table-cell"),
+                    new(DbType.Int, SortDirection.NotSet, nameof(MenuModel.SORT), "Sort", "d-none d-md-table-cell")})">
     <SearchInputControl>
         <input type="text" class="form-control rounded-start" placeholder="Search" @bind-value="@this.A001ViewModel.SearchModel.SEARCH_TEXT" @onkeyup="@SearchKeydown" />
     </SearchInputControl>
