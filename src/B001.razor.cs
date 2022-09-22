@@ -1,5 +1,5 @@
 ﻿using MetaFrm.Extensions;
-using MetaFrm.Razor.DataGrid;
+using MetaFrm.Razor.Essentials;
 using MetaFrm.Service;
 using MetaFrm.Web.Bootstrap;
 using Microsoft.AspNetCore.Components.Web;
