@@ -9,7 +9,6 @@
 <TitleControl Title="@this.GetAttribute("Description")"></TitleControl>
 
 <DataGridControl TItem="MenuModel" @ref="this.DataGridControl" DataItems="this.A001ViewModel.SelectResultModel" PagingEnabled="false"
-                 TableClass="table-hover"
                  RowAdd="this.New"
                  MovePage="this.Search"
                  RowModify="this.RowModify"
@@ -33,26 +32,26 @@
     </SearchButtonControl>
 </DataGridControl>
 
-<ModalControl TItem="MenuModel" SelectItem="this.SelectItem" SelectItemKeyProperty="@(nameof(this.SelectItem.MENU_ID))">
+<ModalControl TItem="MenuModel" SelectItem="this.SelectItem" SelectItemKeyProperty="@(nameof(this.SelectItem.MENU_ID))" HeaderText="@(this.SelectItem == null || this.SelectItem.MENU_ID == null ? "New" : "Edit")">
     <Control>
         <EditForm class="container" Model="@this.SelectItem" OnValidSubmit="this.Save">
             <DataAnnotationsValidator />
 
-            <FieldControl Label="Menu ID" Value="this.SelectItem.MENU_ID" CssClassDiv="pt-2 pb-1"></FieldControl>
-            <FieldControl Label="Menu name">
+            <FieldControl Label="Menu ID" Value="this.SelectItem.MENU_ID"></FieldControl>
+            <FieldControl Label="Menu name" CssClassAppend="py-2 col-md-12">
                 <Control>
                     <InputText id="menuname" class="form-control" placeholder="Menu name" @bind-Value="this.SelectItem.NAME" />
                     <ValidationMessage For="@(()=>this.SelectItem.NAME)" />
                 </Control>
             </FieldControl>
-            <FieldControl Label="Menu description">
+            <FieldControl Label="Menu description" CssClassAppend="py-2 col-md-12">
                 <Control>
                     <InputText id="menudescription" class="form-control" placeholder="Menu description" @bind-Value="this.SelectItem.DESCRIPTION" />
                     <ValidationMessage For="@(()=>this.SelectItem.DESCRIPTION)" />
                 </Control>
             </FieldControl>
 
-            <FieldControl Label="Parent Menu">
+            <FieldControl Label="Parent Menu" CssClassAppend="py-2 col-md-12">
                 <Control>
                     <InputSelect class="form-select" @bind-Value="@this.SelectItem.PARENT_MENU_ID">
                         <DictionaryControl Code="METAFRM_MGMT.MENU.PARENT_MENU" Items="this.ParentMenuItems" ResultEvent="this.OnResultEventParentMenuItems" CondtionEtc="@($"A.MENU_ID <> {this.SelectItem.MENU_ID}")">
@@ -69,7 +68,7 @@
                 </Control>
             </FieldControl>
 
-            <FieldControl Label="Assembly">
+            <FieldControl Label="Assembly" CssClassAppend="py-2 col-md-12">
                 <Control>
                     <InputSelect class="form-select" @bind-Value="@this.SelectItem.ASSEMBLY_ID">
                         <DictionaryControl Code="METAFRM_MGMT.ASSEMBLY" Items="this.AssemblyItems" ResultEvent="this.OnResultEventAssemblyItems" AppendEmptyItem="true">
@@ -87,14 +86,14 @@
             </FieldControl>
 
             <div class="row">
-                <FieldControl Label="Sort" CssClassDiv="py-2 col-md-3">
+                <FieldControl Label="Sort">
                     <Control>
                         <InputNumber id="sort" class="form-control" placeholder="Sort" @bind-Value="this.SelectItem.SORT" />
                         <ValidationMessage For="@(()=>this.SelectItem.SORT)" />
                     </Control>
                 </FieldControl>
 
-                <FieldControl Label="Visible" CssClassDiv="py-2 col-md-3">
+                <FieldControl Label="Visible">
                     <Control>
                         <InputCheckbox id="isvisible" class="form-check-input" placeholder="Visible" @bind-Value="this.SelectItem.IS_VISIBLE" />
                         <ValidationMessage For="@(()=>this.SelectItem.IS_VISIBLE)" />
