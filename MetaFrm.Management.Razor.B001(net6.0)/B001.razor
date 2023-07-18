@@ -54,7 +54,7 @@
             <FieldControl Label="Parent Menu" CssClassAppend="py-2 col-md-12">
                 <Control>
                     <InputSelect class="form-select" @bind-Value="@this.SelectItem.PARENT_MENU_ID">
-                        <DictionaryControl Code="METAFRM_MGMT.MENU.PARENT_MENU" Items="this.ParentMenuItems" ResultEvent="this.OnResultEventParentMenuItems" CondtionEtc="@($"A.MENU_ID <> {this.SelectItem.MENU_ID ?? 0}")">
+                        <DictionaryControl Code="METAFRM_MGMT.MENU.PARENT_MENU" Items="this.ParentMenuItems" ResultEvent="this.OnResultEventParentMenuItems" CondtionEtc="@($"A.MENU_ID <> {this.SelectItem.MENU_ID ?? -1}")">
                             <Control>
                                 @if (this.ParentMenuItems != null)
                                     foreach (var item in this.ParentMenuItems)
