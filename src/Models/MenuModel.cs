@@ -60,7 +60,6 @@ namespace MetaFrm.Management.Razor.Models
         /// <summary>
         /// SORT1
         /// </summary>
-        [Required]
         public int? SORT1 { get; set; }
 
         /// <summary>

@@ -8,7 +8,7 @@
     <AssemblyName>MetaFrm.Management.Razor.B001</AssemblyName>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageId>MetaFrm.Management.Razor.B001.net6.0</PackageId>
-    <Version>6.0.0.15</Version>
+    <Version>6.0.0.16</Version>
     <Authors>dsun</Authors>
     <Company>Meta Framework</Company>
     <Copyright>Copyright 2023. dsun all rights reserved.</Copyright>
