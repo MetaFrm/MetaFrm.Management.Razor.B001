@@ -29,7 +29,7 @@ namespace MetaFrm.Management.Razor.Models
         /// NAME
         /// </summary>
         [Required]
-        [Display(Name = "이름")]
+        [Display(Name = "메뉴명")]
         public string? NAME { get; set; }
 
         /// <summary>
