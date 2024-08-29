@@ -13,17 +13,17 @@
                  MovePage="this.Search"
                  RowModify="this.RowModify"
                  Columns="@(new ColumnDefinitions[] {
-                    new(DbType.Int, SortDirection.Normal, Alignment.Right, nameof(MenuModel.MENU_ID), "Menu ID", "d-none d-sm-table-cell"),
-                    new(DbType.NVarChar, SortDirection.NotSet, nameof(MenuModel.NAME), "Menu"),
-                    new(DbType.Int, SortDirection.Normal, Alignment.Right, nameof(MenuModel.PARENT_MENU_ID), "Parent ID", "d-none d-md-table-cell"),
-                    new(DbType.NVarChar, SortDirection.NotSet, nameof(MenuModel.PARENT_NAME), "Parent"),
-                    new(DbType.NVarChar, SortDirection.NotSet, nameof(MenuModel.DESCRIPTION), "Menu description", "d-none d-lg-table-cell"),
-                    new(DbType.NVarChar, SortDirection.NotSet, nameof(MenuModel.IS_VISIBLE), "Visible", "d-none d-sm-table-cell"),
-                    new(DbType.Int, SortDirection.Normal, Alignment.Right, nameof(MenuModel.ASSEMBLY_ID), "Assembly ID", "d-none d-xl-table-cell"),
-                    new(DbType.NVarChar, SortDirection.NotSet, nameof(MenuModel.NAMESPACE), "Namespace", "d-none d-xl-table-cell"),
-                    new(DbType.Int, SortDirection.NotSet, nameof(MenuModel.SORT), "Sort", "d-none d-md-table-cell")})">
+                    new(DbType.Int, SortDirection.Normal, Alignment.Right, nameof(MenuModel.MENU_ID), "ID", "d-none d-sm-table-cell"),
+                    new(DbType.NVarChar, SortDirection.NotSet, nameof(MenuModel.NAME), "메뉴"),
+                    new(DbType.Int, SortDirection.Normal, Alignment.Right, nameof(MenuModel.PARENT_MENU_ID), "부모 ID", "d-none d-md-table-cell"),
+                    new(DbType.NVarChar, SortDirection.NotSet, nameof(MenuModel.PARENT_NAME), "부모"),
+                    new(DbType.NVarChar, SortDirection.NotSet, nameof(MenuModel.DESCRIPTION), "메뉴 설명", "d-none d-lg-table-cell"),
+                    new(DbType.NVarChar, SortDirection.NotSet, nameof(MenuModel.IS_VISIBLE), "보이는", "d-none d-sm-table-cell"),
+                    new(DbType.Int, SortDirection.Normal, Alignment.Right, nameof(MenuModel.ASSEMBLY_ID), "어셈블리 ID", "d-none d-xl-table-cell"),
+                    new(DbType.NVarChar, SortDirection.NotSet, nameof(MenuModel.NAMESPACE), "네임스페이스", "d-none d-xl-table-cell"),
+                    new(DbType.Int, SortDirection.NotSet, nameof(MenuModel.SORT), "정렬", "d-none d-md-table-cell")})">
     <SearchInputControl>
-        <input type="text" class="form-control rounded-start" placeholder="Search" @bind-value="@this.A001ViewModel.SearchModel.SEARCH_TEXT" @onkeyup="@SearchKeydown" />
+        <input type="text" class="form-control rounded-start" placeholder="@Localization["검색"]" @bind-value="@this.A001ViewModel.SearchModel.SEARCH_TEXT" @onkeyup="@SearchKeydown" />
     </SearchInputControl>
     <SearchButtonControl>
         <button class="btn btn-outline-primary btn-rounded-end" type="submit" @onclick="(() => this.OnSearch())">
@@ -32,76 +32,79 @@
     </SearchButtonControl>
 </DataGridControl>
 
-<ModalControl TItem="MenuModel" SelectItem="this.SelectItem" SelectItemKeyProperty="@(nameof(this.SelectItem.MENU_ID))" HeaderText="@(this.SelectItem == null || this.SelectItem.MENU_ID == null ? "New" : "Edit")">
+<ModalControl TItem="MenuModel" SelectItem="this.SelectItem" SelectItemKeyProperty="@(nameof(this.SelectItem.MENU_ID))" HeaderText="@(this.SelectItem == null || this.SelectItem.MENU_ID == null ? "신규" : "수정")">
     <Control>
         <EditForm class="container" Model="@this.SelectItem" OnValidSubmit="this.Save">
             <DataAnnotationsValidator />
 
-            <FieldControl Label="Menu ID" Value="this.SelectItem.MENU_ID"></FieldControl>
-            <FieldControl Label="Menu name" CssClassAppend="py-2 col-md-12">
-                <Control>
-                    <InputText id="menuname" class="form-control" placeholder="Menu name" @bind-Value="this.SelectItem.NAME" />
-                    <ValidationMessage For="@(()=>this.SelectItem.NAME)" />
-                </Control>
-            </FieldControl>
-            <FieldControl Label="Menu description" CssClassAppend="py-2 col-md-12">
-                <Control>
-                    <InputText id="menudescription" class="form-control" placeholder="Menu description" @bind-Value="this.SelectItem.DESCRIPTION" />
-                    <ValidationMessage For="@(()=>this.SelectItem.DESCRIPTION)" />
-                </Control>
-            </FieldControl>
-
-            <FieldControl Label="Parent Menu" CssClassAppend="py-2 col-md-12">
-                <Control>
-                    <InputSelect class="form-select" @bind-Value="@this.SelectItem.PARENT_MENU_ID">
-                        <DictionaryControl Code="METAFRM_MGMT.MENU.PARENT_MENU" Items="this.ParentMenuItems" ResultEvent="this.OnResultEventParentMenuItems" CondtionEtc="@($"A.MENU_ID <> {this.SelectItem.MENU_ID ?? -1}")">
-                            <Control>
-                                @if (this.ParentMenuItems != null)
-                                    foreach (var item in this.ParentMenuItems)
-                                    {
-                                        <option Value="@(item.Int("MENU_ID"))">@item.String("NAME")</option>
-                                    }
-                            </Control>
-                        </DictionaryControl>
-                    </InputSelect>
-                    <ValidationMessage For="@(()=>this.SelectItem.PARENT_MENU_ID)" />
-                </Control>
-            </FieldControl>
-
-            <FieldControl Label="Assembly" CssClassAppend="py-2 col-md-12">
-                <Control>
-                    <InputSelect class="form-select" @bind-Value="@this.SelectItem.ASSEMBLY_ID">
-                        <DictionaryControl Code="METAFRM_MGMT.ASSEMBLY" Items="this.AssemblyItems" ResultEvent="this.OnResultEventAssemblyItems" AppendEmptyItem="true">
-                            <Control>
-                                @if (this.AssemblyItems != null)
-                                    foreach (var item in this.AssemblyItems)
-                                    {
-                                        <option Value="@(item.Int("ASSEMBLY_ID"))">@item.String("NAMESPACE")</option>
-                                    }
-                            </Control>
-                        </DictionaryControl>
-                    </InputSelect>
-                    <ValidationMessage For="@(()=>this.SelectItem.ASSEMBLY_ID)" />
-                </Control>
-            </FieldControl>
-
-            <div class="row">
-                <FieldControl Label="Sort">
+            @if (this.SelectItem != null)
+            {
+                <FieldControl Label="ID" Value="this.SelectItem.MENU_ID"></FieldControl>
+                <FieldControl Label="메뉴명" CssClassAppend="py-2 col-md-12">
                     <Control>
-                        <InputNumber id="sort" class="form-control" placeholder="Sort" @bind-Value="this.SelectItem.SORT" />
-                        <ValidationMessage For="@(()=>this.SelectItem.SORT)" />
+                        <InputText id="menuname" class="form-control" placeholder="@Localization["메뉴명"]" @bind-Value="this.SelectItem.NAME" />
+                        <ValidationMessage For="@(()=>this.SelectItem.NAME)" />
+                    </Control>
+                </FieldControl>
+                <FieldControl Label="메뉴 설명" CssClassAppend="py-2 col-md-12">
+                    <Control>
+                        <InputText id="menudescription" class="form-control" placeholder="@Localization["메뉴 설명"]" @bind-Value="this.SelectItem.DESCRIPTION" />
+                        <ValidationMessage For="@(()=>this.SelectItem.DESCRIPTION)" />
                     </Control>
                 </FieldControl>
 
-                <FieldControl Label="Visible">
+                <FieldControl Label="부모 메뉴" CssClassAppend="py-2 col-md-12">
                     <Control>
-                        <InputCheckbox id="isvisible" class="form-check-input" placeholder="Visible" @bind-Value="this.SelectItem.IS_VISIBLE" />
-                        <ValidationMessage For="@(()=>this.SelectItem.IS_VISIBLE)" />
+                        <InputSelect class="form-select" @bind-Value="@this.SelectItem.PARENT_MENU_ID">
+                            <DictionaryControl Code="METAFRM_MGMT.MENU.PARENT_MENU" Items="this.ParentMenuItems" ResultEvent="this.OnResultEventParentMenuItems" CondtionEtc="@($"A.MENU_ID <> {this.SelectItem.MENU_ID ?? -1}")">
+                                <Control>
+                                    @if (this.ParentMenuItems != null)
+                                        foreach (var item in this.ParentMenuItems)
+                                        {
+                                            <option Value="@(item.Int("MENU_ID"))">@item.String("NAME")</option>
+                                        }
+                                </Control>
+                            </DictionaryControl>
+                        </InputSelect>
+                        <ValidationMessage For="@(()=>this.SelectItem.PARENT_MENU_ID)" />
                     </Control>
                 </FieldControl>
-            </div>
 
-            <CommandControl TItem="MenuModel" SelectItem="this.SelectItem" SelectItemKeyProperty="@(nameof(this.SelectItem.MENU_ID))" SaveIsSubmit="true" New="this.New" Copy="this.Copy" Delete="this.Delete" />
+                <FieldControl Label="어셈블리" CssClassAppend="py-2 col-md-12">
+                    <Control>
+                        <InputSelect class="form-select" @bind-Value="@this.SelectItem.ASSEMBLY_ID">
+                            <DictionaryControl Code="METAFRM_MGMT.ASSEMBLY" Items="this.AssemblyItems" ResultEvent="this.OnResultEventAssemblyItems" AppendEmptyItem="true">
+                                <Control>
+                                    @if (this.AssemblyItems != null)
+                                        foreach (var item in this.AssemblyItems)
+                                        {
+                                            <option Value="@(item.Int("ASSEMBLY_ID"))">@item.String("NAMESPACE")</option>
+                                        }
+                                </Control>
+                            </DictionaryControl>
+                        </InputSelect>
+                        <ValidationMessage For="@(()=>this.SelectItem.ASSEMBLY_ID)" />
+                    </Control>
+                </FieldControl>
+
+                <div class="row">
+                    <FieldControl Label="정렬">
+                        <Control>
+                            <InputNumber id="sort" class="form-control" placeholder="@Localization["정렬"]" @bind-Value="this.SelectItem.SORT" />
+                            <ValidationMessage For="@(()=>this.SelectItem.SORT)" />
+                        </Control>
+                    </FieldControl>
+
+                    <FieldControl Label="보이는">
+                        <Control>
+                            <InputCheckbox id="isvisible" class="form-check-input" placeholder="@Localization["보이는"]" @bind-Value="this.SelectItem.IS_VISIBLE" />
+                            <ValidationMessage For="@(()=>this.SelectItem.IS_VISIBLE)" />
+                        </Control>
+                    </FieldControl>
+                </div>
+
+                <CommandControl TItem="MenuModel" SelectItem="this.SelectItem" SelectItemKeyProperty="@(nameof(this.SelectItem.MENU_ID))" SaveIsSubmit="true" New="this.New" Copy="this.Copy" Delete="this.Delete" />
+            }
         </EditForm>
     </Control>
 </ModalControl>

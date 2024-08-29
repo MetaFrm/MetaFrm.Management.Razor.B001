@@ -16,20 +16,20 @@ namespace MetaFrm.Management.Razor.Models
         /// PARENT_MENU_ID
         /// </summary>
         [Required]
-        [Display(Name = "Parent")]
+        [Display(Name = "부모")]
         public int? PARENT_MENU_ID { get; set; }
 
         /// <summary>
         /// PARENT_NAME
         /// </summary>
-        [Display(Name = "Parent")]
+        [Display(Name = "부모")]
         public string? PARENT_NAME { get; set; }
 
         /// <summary>
         /// NAME
         /// </summary>
         [Required]
-        [Display(Name = "Name")]
+        [Display(Name = "이름")]
         public string? NAME { get; set; }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace MetaFrm.Management.Razor.Models
         /// </summary>
         [Required]
         [Range(0, int.MaxValue)]
-        [Display(Name = "Sort")]
+        [Display(Name = "정렬")]
         public int? SORT { get; set; }
     }
 }
